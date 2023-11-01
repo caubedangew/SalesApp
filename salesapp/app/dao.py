@@ -33,5 +33,5 @@ def get_products(kw):
     }]
 
     if kw:
-        products = [p for p in products if p["name"].find(kw) >= 0]
+        products = [p for p in products if p["name"].lower().find(kw.lower()) >= 0]
     return products
