@@ -1,37 +1,40 @@
+import hashlib
+from salesapp.app import app
+from salesapp.app.model import Category, Product, User
+
+
 def get_categories():
-    return [{
-        "id": 1,
-        "name": "Mobile"
-    }, {
-        "id": 2,
-        "name": "Tablet"
-    }]
+    return Category.query.all()
 
 
-def get_products(kw):
-    products = [{
-        "id": 1,
-        "name": "iPhone 7 Plus",
-        "description": "Apple, 32GB, RAM: 3GB, iOS13",
-        "price": 17000000,
-        "image": "https://res.cloudinary.com/dxxwcby8l/image/upload/v1647056401/ipmsmnxjydrhpo21xrd8.jpg",
-        "category_id": 1
-    }, {
-        "id": 2,
-        "name": "iPad Pro 2020",
-        "description": "Apple, 128GB, RAM: 6GB",
-        "price": 37000000,
-        "image": "https://res.cloudinary.com/dxxwcby8l/image/upload/v1646729533/zuur9gzztcekmyfenkfr.jpg",
-        "category_id": 2
-    }, {
-        "id": 3,
-        "name": "Galaxy Note 10 Plus",
-        "description": "Samsung, 64GB, RAML: 6GB",
-        "price": 24000000,
-        "image": "https://res.cloudinary.com/dxxwcby8l/image/upload/v1647248722/r8sjly3st7estapvj19u.jpg",
-        "category_id": 1
-    }]
+def get_products(kw, cate_id, page=None):
+    products = Product.query
 
     if kw:
-        products = [p for p in products if p["name"].lower().find(kw.lower()) >= 0]
-    return products
+        products = products.filter(Category.name.contains(kw))
+
+    if cate_id:
+        products = products.filter(Product.category_id.__eq__(cate_id))
+
+    if page:
+        page = int(page)
+        page_size = app.config["PAGE_SIZE"]
+        start = (page - 1) * page_size
+
+        return products.slice(start, start + page_size)
+
+    return products.all()
+
+
+def count_products():
+    return Product.query.count()
+
+
+def get_user_by_user_id(user_id):
+    return User.query.get(user_id)
+
+
+def auth_user(username, password):
+    password = str(hashlib.md5(password.strip().encode("utf-8")).hexdigest())
+    return User.query.filter(User.username.__eq__(username.strip()),
+                             User.password.__eq__(password)).first()
