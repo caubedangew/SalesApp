@@ -1,6 +1,6 @@
 import math
 
-from flask import render_template, request, redirect
+from flask import render_template, request, redirect, jsonify, session
 import dao
 from salesapp.app import app, login
 from flask_login import login_user
@@ -29,6 +29,41 @@ def admin_login():
 @login.user_loader
 def get_user(user_id):
     return dao.get_user_by_user_id(user_id)
+
+
+@app.route("/api/cart", methods=['post'])
+def put_in_cart():
+    '''
+    {
+    }
+    :return:
+    '''
+    data = request.json
+
+    cart = session.get("cart")
+
+    if cart is None:
+        cart = {}
+
+    id = str(data.get("id"))
+    if id in cart: #Nếu sản phẩm có trong giỏ
+        cart[id]["quantity"] += 1
+    else: #Nếu sản phẩm không có trong giỏ
+        cart[id] = {
+            "id": id,
+            "name": data.get("name"),
+            "price": data.get("price"),
+            "quantity": 1
+        }
+
+    session['cart'] = cart
+    print(cart)
+
+    return jsonify({
+        "id": 1,
+        "name": "iPhone 11",
+        "price": 123
+    })
 
 
 if __name__ == '__main__':
