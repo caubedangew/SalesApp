@@ -12,15 +12,15 @@
     <th></th>
   </tr>
   {% for c in session['cart'].values() %}
-  <tr>
+  <tr id="product{{c.id}}">
     <td>{{ c.id }}</td>
     <td>{{ c.name }}</td>
     <td>{{ c.price }}</td>
     <td>
-      <input type="number" value="{{ c.quantity }}" class="form-control" />
+      <input type="number" onblur="updateCart({{ c.id }}, this)" value="{{ c.quantity }}" class="form-control" />
     </td>
     <td>
-      <button class="btn btn-danger">&times; </button>
+      <button class="btn btn-danger" onclick="deleteCart({{ c.id }}, this)">&times; </button>
     </td>
   </tr>
   {% endfor %}
@@ -28,7 +28,7 @@
 
 <div class="alert alert-info">
     <h1>Tổng tiền: {{ cart.total_amount }} VNĐ</h1>
-    <h1>Tổng sản phẩm: {{ cart.total_quantity }}</h1>
+    <h1>Tổng sản phẩm: <span class="cart-counter">{{ cart.total_quantity }}</span></h1>
 </div>
 
 <div>
