@@ -2,6 +2,7 @@ import math
 
 from flask import render_template, request, redirect, jsonify, session
 import dao
+import utils
 from salesapp.app import app, login
 from flask_login import login_user
 
@@ -11,8 +12,7 @@ def index():
     kw = request.args.get('kw')
     cate_id = request.args.get('cate_id')
     page = request.args.get("page")
-    return render_template("index.html", categories=dao.get_categories(),
-                           products=dao.get_products(kw, cate_id, page), pages=math.ceil(dao.count_products()/app.config["PAGE_SIZE"]))
+    return render_template("index.html", products=dao.get_products(kw, cate_id, page), pages=math.ceil(dao.count_products()/app.config["PAGE_SIZE"]))
 
 
 @app.route("/admin/login", methods=["post"])
@@ -57,13 +57,21 @@ def put_in_cart():
         }
 
     session['cart'] = cart
-    print(cart)
 
-    return jsonify({
-        "id": 1,
-        "name": "iPhone 11",
-        "price": 123
-    })
+    return jsonify(utils.count_cart(cart))
+
+
+@app.route("/cart")
+def cart():
+    return render_template("cart.html")
+
+
+@app.context_processor
+def common_response():
+    return {
+        "categories": dao.get_categories(),
+        "cart": utils.count_cart(session.get("cart"))
+    }
 
 
 if __name__ == '__main__':

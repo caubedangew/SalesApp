@@ -12,6 +12,8 @@ function addToCart(id, name, price){
     }).then(function(res){
         return res.json();
     }).then(function(data){
-        console.info(data)
+        let items = document.getElementsByClassName("cart-counter");
+        for (let item of items)
+            item.innerText = data.total_quantity;
     });
 }
