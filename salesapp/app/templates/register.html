@@ -1,0 +1,29 @@
+{% extends 'layout/base.html'%}
+
+{% block content%}
+<h1 class="text-center text-info mt-1">ĐĂNG NHẬP NGƯỜI DÙNG</h1>
+
+<form method="post" enctype="multipart/form-data" action="/register">
+  <div class="mb-3 mt-3">
+    <label for="name" class="form-label">Username:</label>
+    <input type="text" class="form-control" id="name" name="name" placeholder="Enter name" required>
+  </div>
+  <div class="mb-3 mt-3">
+    <label for="username" class="form-label">Username:</label>
+    <input type="text" class="form-control" id="username" name="username" placeholder="Enter username" required>
+  </div>
+  <div class="mb-3">
+    <label for="pwd" class="form-label">Password:</label>
+    <input type="password" class="form-control" id="pwd" placeholder="Enter password" name="password" required>
+  </div>
+  <div class="mb-3">
+    <label for="confirm" class="form-label">Confirm Password:</label>
+    <input type="password" class="form-control" id="confirm" placeholder="Confirm password" name="confirm" required>
+  </div>
+  <div class="mb-3">
+    <label for="avatar" class="form-label">Avatar:</label>
+    <input type="file" class="form-control" id="avatar">
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+{% endblock %}
