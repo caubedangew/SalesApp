@@ -31,8 +31,13 @@
     <h1>Tổng sản phẩm: <span class="cart-counter">{{ cart.total_quantity }}</span></h1>
 </div>
 
+
 <div>
+    {% if current_user.is_authenticated %}
     <button class="btn btn-primary">Thanh toán</button>
+    {% else %}
+    <p>Vui lòng <a href="/login?next=/cart">đăng nhập</a> để thanh toán</p>
+    {% endif %}
 </div>
 {% else %}
 <div class="alert alert-warning">Không có sản phẩm nào trong giỏ</div>

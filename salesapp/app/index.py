@@ -31,6 +31,11 @@ def get_user(user_id):
     return dao.get_user_by_user_id(user_id)
 
 
+@app.route("/login")
+def login():
+    return render_template("/login.html")
+
+
 @app.route("/api/cart", methods=['post'])
 def put_in_cart():
     '''
